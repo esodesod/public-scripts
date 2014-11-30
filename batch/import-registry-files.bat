@@ -1,7 +1,7 @@
 @echo off
 rem
 rem Import registry files from current directory into registry.
-rem Also do some logging. Cause it's cool.
+rem Also do some logging. Because it's cool.
 rem
 rem
 rem
