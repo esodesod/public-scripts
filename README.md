@@ -17,13 +17,6 @@ Sample output
    iopsCongestion:0
    logCongestion:0
    compCongestion:0
-52f3f449-313d-8bd0-6897-1ddfdd641ee4
-   memCongestion:0
-   slabCongestion:0
-   ssdCongestion:0
-   iopsCongestion:0
-   logCongestion:0
-   compCongestion:0
 ```
 
 ## Cisco
