@@ -7,18 +7,6 @@ $files_dst = gci -file $root_dst -recurse | select -ExpandProperty Name
 # Compare
 $files_src | ?{$files_dst -notcontains $_}
 
-
-# Compare array of files, based on name only.
-# Filters: Find reparsepoint in src, and ignore folders (both)
-#$root_src = "C:\temp\powershell\src"
-#$root_dst = "C:\temp\powershell\dst"
-#$files_src = gci -file $root_src -recurse | where {$_.attributes -match 'ReparsePoint' -and ! $_.PSIsContainer } | select -ExpandProperty name
-#$files_dst = gci -file $root_dst -recurse |  where {! $_.PSIsContainer } | select -ExpandProperty name
-#$files_src | ?{$files_dst -notcontains $_}
-# Measure results, and display count
-#$files_src | measure | % {$_.count }
-#$files_dst | measure | % {$_.count }
-
 # Compare two sources, and include path from fullname, but replace parts (e.g. keep folder structure)
 # Compare results of two arrays
 $root_src = "C:\temp\powershell\src"
@@ -38,3 +26,6 @@ $files_src | measure | % {$_.count }
 $files_dst | measure | % {$_.count }
 # Compare results, including folder structure
 ($files_src).replace("$root_src","ROOT") | ?{($files_dst).replace("$root_dst","ROOT") -notcontains $_}
+# Compare results, but using Compare-Object (faster)
+Compare-Object -ReferenceObject $(($files_src).replace("$root_src","ROOT")) -DifferenceObject $(($files_dst).replace("$root_dst","ROOT")) | Where { $_.SideIndicator -eq '<=' }
+Compare-Object -ReferenceObject $(($files_src).replace("$root_src","ROOT")) -DifferenceObject $(($files_dst).replace("$root_dst","ROOT")) | Where { $_.SideIndicator -eq '<=' } | measure | % {$_.count }
