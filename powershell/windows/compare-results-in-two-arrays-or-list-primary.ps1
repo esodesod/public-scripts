@@ -17,7 +17,19 @@ $files_dst | Measure-Object | ForEach-Object {$_.count }
 # Set compare variables, using previous variables, and replace parts of fullpath
 $compare_src = ($files_src).replace("$root_src","ROOT")
 $compare_dst = ($files_dst).replace("$root_dst","ROOT")
-# Do a compare, show "left only"
-Compare-Object -ReferenceObject $compare_src -DifferenceObject $compare_dst | Where-Object { $_.SideIndicator -eq '<=' }
-# Do a compare, and measure (count) "left only" objects
-Compare-Object -ReferenceObject $compare_src -DifferenceObject $compare_dst | Where-Object { $_.SideIndicator -eq '<=' } | Measure-Object | ForEach-Object {$_.count }
+# Do a compare. Get "left only" objects
+$compare_left_only_objects = Compare-Object -ReferenceObject $compare_src -DifferenceObject $compare_dst | Where-Object { $_.SideIndicator -eq '<=' }
+# Count results
+$compare_left_only_objects | Measure-Object | ForEach-Object {$_.count }
+# Show results
+$compare_left_only_objects
+
+# Do a new compare, and time (measure) command
+Measure-Command { Compare-Object -ReferenceObject $compare_src -DifferenceObject $compare_dst | Where-Object { $_.SideIndicator -eq '<=' } }
+
+# Do a compare. Get "identical" objects
+$compare_identical_objects = Compare-Object -ReferenceObject $compare_src -DifferenceObject $compare_dst -IncludeEqual | Where-Object { $_.SideIndicator -eq '==' }
+# Count results
+$compare_identical_objects | Measure-Object | ForEach-Object {$_.count }
+# Show results
+$compare_identical_objects
