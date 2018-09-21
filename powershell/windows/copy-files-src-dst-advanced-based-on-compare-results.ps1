@@ -35,7 +35,7 @@ $files_vault = Get-ChildItem -file $root_vault -recurse
 # Measure (count) objects in both locations
 Write-Host "Count of files found in $root_vault"
 $files_vault | Measure-Object | ForEach-Object {$_.count }
-Write-Host "Count of files found in $root_dst"
+Write-Host "Count of ReparsePoint files found in $root_dst"
 $files_dst | Measure-Object | ForEach-Object {$_.count }
 # Set compare variables, using previous variables, and replace parts of fullpath, so compare will work
 $compare_vault = ($files_vault.FullName).replace("$root_vault","ROOT")
