@@ -20,6 +20,8 @@
 # Notes:
 # * Tested with WMF & PSVersion 5.1
 # * Older PowerShell may not understand e.g. "-file" (could use "{! $_.PSIsContainer }", but hey.. why not upgrade
+# * Files with braces, e.g. file[1].pdf will sometimes have trouble reading ItemProperties (e.g. CreationTime)
+#   - Manually fix for now, but may be scripted, if many occurrences
 # ####################################################################################################################
 
 # ####################################################################################################################
@@ -35,7 +37,7 @@ $files_vault = Get-ChildItem -file $root_vault -recurse
 # Measure (count) objects in both locations
 Write-Host "Count of files found in $root_vault"
 $files_vault | Measure-Object | ForEach-Object {$_.count }
-Write-Host "Count of ReparsePoint files found in $root_dst"
+Write-Host "Count of files (ReparsePoint only) found in $root_dst"
 $files_dst | Measure-Object | ForEach-Object {$_.count }
 # Set compare variables, using previous variables, and replace parts of fullpath, so compare will work
 $compare_vault = ($files_vault.FullName).replace("$root_vault","ROOT")
@@ -49,10 +51,10 @@ $compare_dst = ($files_dst.FullName).replace("$root_dst","ROOT")
 # Do a compare. Get "identical" objects (==)
 $compare_identical_objects = Compare-Object -ReferenceObject $compare_dst -DifferenceObject $compare_vault -IncludeEqual | Where-Object { $_.SideIndicator -eq '==' }
 # Count results
-Write-Host "Count of files: IDENTICAL / found in both directories"
+Write-Host "Count of MATCHING files (both in source, and as ReparsePoint)"
 $compare_identical_objects | Measure-Object | ForEach-Object {$_.count }
 # Show results
-Write-Host "Files: IDENTICAL / found in both directories"
+Write-Host "Display MATCHING files, if any (located as both ReparsePoint and in source)"
 $compare_identical_objects
 # ####################################################################################################################
 
