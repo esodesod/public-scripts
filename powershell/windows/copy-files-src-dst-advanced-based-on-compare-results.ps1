@@ -109,9 +109,14 @@ $compare_left_only_objects = Compare-Object -ReferenceObject $compare_dst -Diffe
 # Count results
 Write-Host "Count of files: LEFT ONLY / MISSING IN $root_dst"
 $compare_left_only_objects | Measure-Object | ForEach-Object {$_.count }
+# Generate list og files
+$files_left_only = ($compare_left_only_objects.InputObject).Replace("ROOT","$root_dst")
+# Export list
+$files_left_only_logfile = "C:\temp\vault\files_left_only.txt"
+$files_left_only | Out-File $files_left_only_logfile
 # Show results
 Write-Host "Files: LEFT ONLY / MISSING IN $root_dst"
-$compare_left_only_objects
+$files_left_only
 
 
 # ####################################################################################################################
