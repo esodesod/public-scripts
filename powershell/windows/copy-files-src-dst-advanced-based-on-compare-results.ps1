@@ -59,10 +59,9 @@ $compare_identical_objects
 # ####################################################################################################################
 
 # ####################################################################################################################
-## Copy IDENTICAL (==) / MATCHING objects
+# Copy IDENTICAL (==) / MATCHING objects
+# NOTE: If files include special characters, e.g. brackets, use "-LiteralPath" (see added sample later in this script)
 $files_identical_src = ($compare_identical_objects.InputObject).replace("ROOT","$root_vault")
-#$files_identical_dst = ($compare_identical_objects.InputObject).replace("ROOT","$root_dst")
-#$files_identical_dst | Remove-Item -WhatIf
 
 # Loop trough each file from compare results, where files have identical fullname MATCH, in both source and destination
 foreach ($srcfile in $files_identical_src) {
@@ -113,6 +112,37 @@ $compare_left_only_objects | Measure-Object | ForEach-Object {$_.count }
 # Show results
 Write-Host "Files: LEFT ONLY / MISSING IN $root_dst"
 $compare_left_only_objects
+
+
+# ####################################################################################################################
+# Copy IDENTICAL (==) / MATCHING objects
+# NOTE: with SPECIAL CHARACTERS, e.g. brackets "[]" in name
+# NOTE: * use "LiteralPath" (or replace brackets)
+$files_identical_src = ($compare_identical_objects.InputObject).replace("ROOT","$root_vault")
+
+# Loop trough each file from compare results, where files have identical fullname MATCH, in both source and destination
+foreach ($srcfile in $files_identical_src) {
+    # Build destination file fullname, based on source fullname
+    # Note: Use [io.FileInfo] to get existing file information
+    $dstfile = [io.FileInfo]($srcfile).replace("$root_vault","$root_dst")
+
+    # Remove destination file first (which is "offline" and inaccessible, and can't be "overwritten")
+    #if ($dstfile.Exists) { Remove-Item $dstfile }
+    if ($dstfile.Exists) { Remove-Item -LiteralPath $dstfile }
+    
+    # Copy source file to destination
+    #Copy-Item $srcfile $dstfile
+    Copy-Item -LiteralPath $srcfile $dstfile
+
+    # Copy specific file attributes from source to destination
+    if ($dstfile.Exists) {
+      $dstfile.CreationTime = (Get-ItemProperty -LiteralPath $srcfile).CreationTime
+      $dstfile.LastAccessTime = (Get-ItemProperty -LiteralPath $srcfile).LastAccessTime
+      $dstfile.LastWriteTime = (Get-ItemProperty -LiteralPath $srcfile).LastWriteTime
+      $dstfile.Attributes = (Get-ItemProperty -LiteralPath $srcfile).Attributes
+    }
+  }
+# ####################################################################################################################
 
 
 # ####################################################################################################################
