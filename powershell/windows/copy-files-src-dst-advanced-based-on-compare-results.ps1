@@ -24,6 +24,13 @@
 #   - Manually fix for now, but may be scripted, if many occurrences
 # ####################################################################################################################
 
+# Remote session?
+<#
+# Ask & save credential to variable, if not using current
+$cred = Get-Credential
+Enter-PSSession server.domain.tld -Credential $cred
+#>
+
 # ####################################################################################################################
 # Set variables, and do a quick measure (count)
 #
