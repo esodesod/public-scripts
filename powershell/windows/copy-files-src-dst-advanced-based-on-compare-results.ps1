@@ -30,10 +30,11 @@
 # Set source and destination for compare
 $root_vault = "C:\temp\vault"
 $root_dst = "C:\temp\dst"
+$files_left_only_logfile = "C:\temp\files_left_only.txt"
 # Get all files from both directories
+$files_vault = Get-ChildItem -file $root_vault -recurse
 # Filter: Only ReparsePoints files from destination (which we want to copy from vault drive)
 $files_dst = Get-ChildItem -file $root_dst -recurse | Where-Object {$_.attributes -match 'ReparsePoint'}
-$files_vault = Get-ChildItem -file $root_vault -recurse
 # Measure (count) objects in both locations
 Write-Host "Count of files found in $root_vault"
 $files_vault | Measure-Object | ForEach-Object {$_.count }
@@ -53,9 +54,11 @@ $compare_identical_objects = Compare-Object -ReferenceObject $compare_dst -Diffe
 # Count results
 Write-Host "Count of MATCHING files (both in source, and as ReparsePoint)"
 $compare_identical_objects | Measure-Object | ForEach-Object {$_.count }
-# Show results
+# Show results (uncomment section below, or run selected parts of script)
+<#
 Write-Host "Display MATCHING files, if any (located as both ReparsePoint and in source)"
 $compare_identical_objects
+#>
 # ####################################################################################################################
 
 # ####################################################################################################################
@@ -112,12 +115,12 @@ $compare_left_only_objects | Measure-Object | ForEach-Object {$_.count }
 # Generate list og files
 $files_left_only = ($compare_left_only_objects.InputObject).Replace("ROOT","$root_dst")
 # Export list
-$files_left_only_logfile = "C:\temp\vault\files_left_only.txt"
 $files_left_only | Out-File $files_left_only_logfile
-# Show results
+# Show results (uncomment section below, or run selected parts of script)
+<#
 Write-Host "Files: LEFT ONLY / MISSING IN $root_dst"
 $files_left_only
-
+#>
 
 # ####################################################################################################################
 # Copy IDENTICAL (==) / MATCHING objects
