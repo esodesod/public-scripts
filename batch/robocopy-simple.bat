@@ -9,11 +9,6 @@ rem
 rem #################
 rem setting variables
 rem #################
-:: vars > paths and filenames
-set runpath=%~dp0
-set scriptname=%~n0
-set log=%runpath%\%scriptname%.log
-
 :: vars > time
 set _datestr=%date:~6,4%-%date:~3,2%-%date:~0,2%
 set _tmpvar=%time:~0,8%
@@ -21,6 +16,11 @@ set _tmpvar=%_tmpvar: =0%
 set _timefriendly=%_tmpvar%
 set _tmpvar=%_tmpvar::=%
 set _timestr=%_tmpvar%
+
+:: vars > paths and filenames
+set runpath=%~dp0
+set scriptname=%~n0
+set log=%runpath%\%scriptname%-%_datestr%-%_timestr%.log
 
 :: vars > robocopy
 set src=\\file-01.domain.tld\foldername
@@ -36,9 +36,10 @@ echo COMMAND: robocopy %src% %dst% %robovars%
 echo.
 echo.
 echo Just press the "anykey" to continue...
+echo %_timestr%
 pause >nul
 
-robocopy %src% %dst% %robovars%
+rem robocopy %src% %dst% %robovars%
 
 
 rem ####
