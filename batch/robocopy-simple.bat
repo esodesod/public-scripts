@@ -25,7 +25,7 @@ set log=%runpath%\%scriptname%-%_datestr%-%_timestr%.log
 :: vars > robocopy
 set src=\\file-01.domain.tld\foldername
 set dst=\\file-02.domain.tld\foldername
-set robovars=/MIR /COPY:DATSOU /MT:10 /R:3 /W:10 /log+:%log%
+set robovars=/MIR /COPY:DATSOU /MT:10 /R:3 /W:10 /NP /TEE /log+:%log%
 rem that's mirror, data, attributes - timestamps, security/ntfs/acl, owner, auditing info
 rem multi thread, retries, wait between retries & log
 
