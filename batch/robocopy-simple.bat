@@ -20,11 +20,11 @@ set _timestr=%_tmpvar%
 :: vars > paths and filenames
 set runpath=%~dp0
 set scriptname=%~n0
-set log=%runpath%\%scriptname%-%_datestr%-%_timestr%.log
+set log="%runpath%%scriptname%-%_datestr%_%_timestr%.log"
 
 :: vars > robocopy
-set src=\\file-01.domain.tld\foldername
-set dst=\\file-02.domain.tld\foldername
+set src="\\file-01.domain.tld\foldername"
+set dst="\\file-02.domain.tld\foldername"
 set robovars=/MIR /COPY:DATSOU /MT:10 /R:3 /W:10 /NP /TEE /log+:%log%
 rem that's mirror, data, attributes - timestamps, security/ntfs/acl, owner, auditing info
 rem multi thread, retries, wait between retries & log
@@ -36,12 +36,15 @@ echo COMMAND: robocopy %src% %dst% %robovars%
 echo.
 echo.
 echo Just press the "anykey" to continue...
-echo %_timestr%
 pause >nul
 
-rem robocopy %src% %dst% %robovars%
+robocopy %src% %dst% %robovars%
 
-
+echo.
+echo.
+echo I'm done (phew!).
+echo Just press the "anykey" to exit (with a zero, which means success.. or 0, or nothing).
+pause >nul
 rem ####
 rem exit
 rem ####
