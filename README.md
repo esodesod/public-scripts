@@ -6,7 +6,7 @@
 
 ## Microsoft
 Measure size (length) on all items in this folder
-"{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
+`"{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)`
 
 ## VMware VSAN
 Check congestion values
