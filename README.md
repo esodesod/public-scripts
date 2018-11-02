@@ -4,6 +4,10 @@
 
 # One-liners
 
+## Microsoft
+Measure size (length) on all items in this folder
+"{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
+
 ## VMware VSAN
 Check congestion values
 `for ssd in $(localcli vsan storage list |grep "Group UUID"|awk '{print $5}'|sort -u);do echo $ssd;vsish -e get /vmkModules/lsom/disks/$ssd/info|grep Congestion;done`
