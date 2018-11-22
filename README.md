@@ -15,13 +15,17 @@ Measure size (length) on all items in this folder
 Capture network traffic on a ESXi-host, e.g. for NTP
 > * `-n` = No resolve
 > * `-i` = Interface
+> * `-q` = Quick (show e.g. UDP vs local6.info)
 
 Samples
 ```
-tcpdump-uw -i vmk0 port 123
-tcpdump-uw -n -i vmk0 port 123
-tcpdump-uw -c 5 -n -i vmk0 host 1.1.1.1 and port 123
+tcpdump-uw -nqi vmk0 port 123
+tcpdump-uw -nqi vmk0 host 1.1.1.1 and port 123
+tcpdump-uw -nqi vmk0 port 123 and not host 2.2.2.2
 ```
+
+Useful blogs
+http://rickardnobel.se/tcpdump-uw-for-troubleshoot-esxi-networking/
 
 ### vSAN
 Check congestion values
