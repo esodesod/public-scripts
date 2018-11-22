@@ -10,7 +10,20 @@ Measure size (length) on all items in this folder
 "{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
 ```
 
-## VMware VSAN
+## VMware
+### Networking
+Capture network traffic on a ESXi-host, e.g. for NTP
+> * `-n` = No resolve
+> * `-i` = Interface
+
+Samples
+```
+tcpdump-uw -i vmk0 port 123
+tcpdump-uw -n -i vmk0 port 123
+tcpdump-uw -c 5 -n -i vmk0 host 1.1.1.1 and port 123
+```
+
+### vSAN
 Check congestion values
 `for ssd in $(localcli vsan storage list |grep "Group UUID"|awk '{print $5}'|sort -u);do echo $ssd;vsish -e get /vmkModules/lsom/disks/$ssd/info|grep Congestion;done`
 
