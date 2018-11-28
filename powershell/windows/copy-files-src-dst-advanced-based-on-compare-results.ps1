@@ -1,4 +1,5 @@
-# About: Espen Ødegaard / esod.no / Twitter: @esodesod
+<#
+# Espen Ødegaard / esod.no / Twitter: @esodesod
 # Copy and re-use as you may like!
 # ####################################################################################################################
 # Created for customer, based the following needs
@@ -23,14 +24,18 @@
 # * Files with braces, e.g. file[1].pdf will sometimes have trouble reading ItemProperties (e.g. CreationTime)
 #   - Manually fix for now, but may be scripted, if many occurrences
 # ####################################################################################################################
+#>
 
-# Remote session?
 <#
+# Be awesome. Do a remote session?
+# ####################################################################################################################
 # Ask & save credential to variable, if not using current
 $cred = Get-Credential
 Enter-PSSession server.domain.tld -Credential $cred
+# ####################################################################################################################
 #>
 
+#<#
 # ####################################################################################################################
 # Set variables, and do a quick measure (count)
 #
@@ -51,7 +56,9 @@ $files_dst | Measure-Object | ForEach-Object {$_.count }
 $compare_vault = ($files_vault.FullName).replace("$root_vault","ROOT")
 $compare_dst = ($files_dst.FullName).replace("$root_dst","ROOT")
 # ####################################################################################################################
+#>
 
+#<#
 # ####################################################################################################################
 # Compare IDENTICAL (==) / MATCHING objects
 # In other words: objects found in both locations - we'll automate copying here!
@@ -67,7 +74,9 @@ Write-Host "Display MATCHING files, if any (located as both ReparsePoint and in 
 $compare_identical_objects
 #>
 # ####################################################################################################################
+#>
 
+#<#
 # ####################################################################################################################
 # Copy IDENTICAL (==) / MATCHING objects
 # NOTE: If files include special characters, e.g. brackets, use "-LiteralPath" (see added sample later in this script)
@@ -94,6 +103,7 @@ foreach ($srcfile in $files_identical_src) {
     }
   }
 # ####################################################################################################################
+#>
 
 
 
@@ -104,8 +114,8 @@ foreach ($srcfile in $files_identical_src) {
 
 
 
-
-
+<#
+# Uncomment section, or run selected parts of script
 # ####################################################################################################################
 # Other useful snippets
 # ####################################################################################################################
@@ -123,12 +133,13 @@ $compare_left_only_objects | Measure-Object | ForEach-Object {$_.count }
 $files_left_only = ($compare_left_only_objects.InputObject).Replace("ROOT","$root_dst")
 # Export list
 $files_left_only | Out-File $files_left_only_logfile
-# Show results (uncomment section below, or run selected parts of script)
-<#
+# Show results
 Write-Host "Files: LEFT ONLY / MISSING IN $root_dst"
 $files_left_only
 #>
 
+<#
+# Uncomment section, or run selected parts of script
 # ####################################################################################################################
 # Copy IDENTICAL (==) / MATCHING objects
 # NOTE: with SPECIAL CHARACTERS, e.g. brackets "[]" in name
@@ -158,8 +169,10 @@ foreach ($srcfile in $files_identical_src) {
     }
   }
 # ####################################################################################################################
+#>
 
-
+<#
+# Uncomment section, or run selected parts of script
 # ####################################################################################################################
 # Do TIMINGS of commands
 # Do timings
@@ -171,3 +184,4 @@ Write-Host "Timing compare of LEFT ONLY objects"
 Measure-Command { Compare-Object -ReferenceObject $compare_vault -DifferenceObject $compare_dst | Where-Object { $_.SideIndicator -eq '<=' } }
 Write-Host "Timing compare of IDENTICAL objects"
 Measure-Command { Compare-Object -ReferenceObject $compare_vault -DifferenceObject $compare_dst -IncludeEqual | Where-Object { $_.SideIndicator -eq '==' } }
+#>
