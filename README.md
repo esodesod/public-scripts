@@ -1,16 +1,13 @@
-# Scripts
+# Good old one-liners, is it?
 > Will probably add some comments here, #someday.
 
-- [Scripts](#scripts)
-- [One-liners](#one-liners)
+**TOC**
    - [Microsoft](#microsoft)
    - [VMware](#vmware)
       - [Networking](#networking)
       - [vSAN](#vsan)
    - [Cisco](#cisco)
       - [Quick view on ports + input & output rate](#quick-view-on-ports--input--output-rate)
-
-# One-liners
 
 ## Microsoft
 Measure size (length) on all items in this folder
