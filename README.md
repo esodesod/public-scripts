@@ -6,8 +6,14 @@
 
 ## Microsoft
 Measure size (length) on all items in this folder
-``` powershell
+```powershell
 "{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
+```
+
+Disable Google Updater on all matching objects (two-liner)
+```powershell
+$servers = (Get-ADComputer -Filter * -Property * | Where-Object operatingsystem -Like windows*server* | Where-Object name -Like srv-p-*)
+foreach ($server in $servers) {Invoke-Command -ComputerName $server.name {Get-Service -name gupdate | Set-Service -StartupType Disabled}}
 ```
 
 ## VMware
