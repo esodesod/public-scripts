@@ -1,6 +1,14 @@
 # Scripts
 > Will probably add some comments here, #someday.
 
+- [Scripts](#scripts)
+- [One-liners](#one-liners)
+   - [Microsoft](#microsoft)
+   - [VMware](#vmware)
+      - [Networking](#networking)
+      - [vSAN](#vsan)
+   - [Cisco](#cisco)
+      - [Quick view on ports + input & output rate](#quick-view-on-ports--input--output-rate)
 
 # One-liners
 
@@ -10,7 +18,7 @@ Measure size (length) on all items in this folder
 "{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
 ```
 
-Disable Google Updater on all matching objects (two-liner)
+Disable Google Updater on all matching objects (well, two-liner, but who's counting?)
 ```powershell
 $servers = (Get-ADComputer -Filter * -Property * | Where-Object operatingsystem -Like windows*server* | Where-Object name -Like srv-p-*)
 foreach ($server in $servers) {Invoke-Command -ComputerName $server.name {Get-Service -name gupdate | Set-Service -StartupType Disabled}}
