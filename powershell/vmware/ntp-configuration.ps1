@@ -3,7 +3,7 @@
 # Check http://www.vhersey.com/2013/10/setting-esxi-dns-and-ntp-using-powercli/
 
 # Check NTP configuration
-Get-VMHost | Select-Object Name,@{Name=”NTPServer”;Expression={$_ | Get-VMHostNtpServer}}, @{Name=”NTPRunning”;Expression={($_ | Get-VMHostService | Where-Object {$_.key -eq “ntpd”}).Running}} | Sort-Object -Property “NTPRunning”, “NTPServer”
+Get-VMHost | Select-Object Name,@{Name="NTPServer";Expression={$_ | Get-VMHostNtpServer}}, @{Name="NTPRunning";Expression={($_ | Get-VMHostService | Where-Object {$_.key -eq "ntpd"}).Running}} | Sort-Object -Property "NTPRunning", "NTPServer"
 
 #Prompt for NTP Servers
 $ntpone = read-host "Enter NTP Server One"
