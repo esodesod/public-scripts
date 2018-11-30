@@ -1,25 +1,15 @@
-# Good old one-liners, is it?
+Good old one-liners, is it?
+=============================
 > Will probably add some comments here, #someday.
 
-**TOC**
-   - [Microsoft](#microsoft)
-   - [VMware](#vmware)
-      - [Networking](#networking)
-      - [vSAN](#vsan)
-   - [Cisco](#cisco)
-      - [Quick view on ports + input & output rate](#quick-view-on-ports--input--output-rate)
-
-## Microsoft
-Measure size (length) on all items in this folder
-```powershell
-"{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
-```
-
-Disable Google Updater on all matching objects (well, two-liner, but who's counting?)
-```powershell
-$servers = (Get-ADComputer -Filter * -Property * | Where-Object operatingsystem -Like windows*server* | Where-Object name -Like srv-p-*)
-foreach ($server in $servers) {Invoke-Command -ComputerName $server.name {Get-Service -name gupdate | Set-Service -StartupType Disabled}}
-```
+**Jump right in..**
+- [VMware](#vmware)
+   - [Networking](#networking)
+   - [vSAN](#vsan)
+- [Network](#network)
+- [Microsoft](#microsoft)
+- [Cisco](#cisco)
+   - [Quick view on ports + input & output rate](#quick-view-on-ports--input--output-rate)
 
 ## VMware
 ### Networking
@@ -51,6 +41,36 @@ Sample output
    iopsCongestion:0
    logCongestion:0
    compCongestion:0
+```
+
+## Network
+> tcpdump (the real one)
+```bash
+tcpdump -i eth0 -n port 902 and src 10.10.10.10
+tcpdump -i eth0 -n port 902 and src 10.10.10.10 -l | tee /tmp/tcpdump.log
+tcpdump -i eth0 -n port 902 and host 10.10.10.10
+tcpdump 'src 10.0.2.4 and (dst port 3389 or 22)'
+```
+
+> * `-i` interface
+> * `-n` Don't convert addresses (i.e., host addresses, port numbers, etc.) to names.
+> * `-l` Make stdout line buffered. Useful if you want to see the data while capturing it
+
+
+Great samples
+https://www.tcpdump.org/manpages/tcpdump.1.html
+https://danielmiessler.com/study/tcpdump/
+
+## Microsoft
+Measure size (length) on all items in this folder
+```powershell
+"{0:N2} GB" -f ((Get-ChildItem -Path . -Recurse | Measure-Object -Property Length -Sum).Sum / 1GB)
+```
+
+Disable Google Updater on all matching objects (well, two-liner, but who's counting?)
+```powershell
+$servers = (Get-ADComputer -Filter * -Property * | Where-Object operatingsystem -Like windows*server* | Where-Object name -Like srv-p-*)
+foreach ($server in $servers) {Invoke-Command -ComputerName $server.name {Get-Service -name gupdate | Set-Service -StartupType Disabled}}
 ```
 
 ## Cisco
