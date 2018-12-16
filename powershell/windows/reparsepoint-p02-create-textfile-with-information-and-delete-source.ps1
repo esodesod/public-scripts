@@ -30,14 +30,13 @@ foreach ($file in $files_dst) {
             # Debug
             Write-Host $outfile "successfully located, you may remove the ReparsePoint now" -ForegroundColor Green
             # Remove the ReparsePoint
+            Write-Host $outfile "removing the ReparsePoint file" -ForegroundColor Green
             Remove-Item $file.FullName -WhatIf
         }
         if ($outfile_check -eq $False) {
             # Debug
-            Write-Host $outfile "Not found. Do nothing. I'm serious" -ForegroundColor Red
+            Write-Host $outfile "Not found. Do nothing. I'm serious." -ForegroundColor Red
         }
     }
 }
 #>
-
-$files_dst | Export-Csv
