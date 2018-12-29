@@ -126,6 +126,13 @@ $servers = (Get-ADComputer -Filter * -Property * | Where-Object operatingsystem 
 foreach ($server in $servers) {Invoke-Command -ComputerName $server.name {Get-Service -name gupdate | Set-Service -StartupType Disabled}}
 ```
 
+Invert Mouse Scrolling (MacOS, huh?)
+```
+Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Enum\HID\*\*\Device` Parameters FlipFlopWheel -EA 0 | ForEach-Object { Set-ItemProperty $_.PSPath FlipFlopWheel 1 }
+```
+Needs reboot or trigger change
+
+
 ## Cisco
 ### Quick view on ports + input & output rate
 `sh int | inc protocol|input rate|output rate`
