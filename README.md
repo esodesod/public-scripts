@@ -29,8 +29,8 @@ tcpdump-uw -nqi vmk0 port 123 and not host 2.2.2.2
 ```
 
 Useful blogs
-http://rickardnobel.se/tcpdump-uw-for-troubleshoot-esxi-networking/
-https://www.virten.net/2015/10/esxi-network-troubleshooting-with-tcpdump-uw-and-pktcap-uw/
+* http://rickardnobel.se/tcpdump-uw-for-troubleshoot-esxi-networking/
+* https://www.virten.net/2015/10/esxi-network-troubleshooting-with-tcpdump-uw-and-pktcap-uw/
 
 ### vSAN
 Check congestion values
