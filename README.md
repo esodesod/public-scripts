@@ -26,6 +26,10 @@ Samples
 tcpdump-uw -nqi vmk0 port 123
 tcpdump-uw -nqi vmk0 host 1.1.1.1 and port 123
 tcpdump-uw -nqi vmk0 port 123 and not host 2.2.2.2
+# Get switchport on VM from esxtop, then..
+pktcap-uw --switchport 33557190 -o - | tcpdump-uw -enr - port 67 or port 68 -e -n
+# Limit more on pktcap-uw
+pktcap-uw --switchport 33557190 --ip 10.10.10.10 -o - | tcpdump-uw -enr - port 67 or port 68 -e -n
 ```
 
 Useful blogs
