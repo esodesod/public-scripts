@@ -5,7 +5,7 @@ function Keep-Pinging
     ping.exe -t $Hostname |ForEach-Object {
         $Color = if($_ -like "Request timed out*") {
             "Red"
-        } elseif($_ -like "Reply from*") {
+        } elseif($_ -like "Reply from*time*") {
             "Green"
         } else {
             "Gray"
@@ -13,3 +13,5 @@ function Keep-Pinging
         Write-Host $_ -ForegroundColor $Color
     }
 }
+
+Set-Alias -Name kping -Value Keep-Pinging
