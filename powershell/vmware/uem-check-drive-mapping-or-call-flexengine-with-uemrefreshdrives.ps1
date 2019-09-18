@@ -6,18 +6,23 @@
 # * Retry commands N times, before exiting.
 
 # Variables
-$check_drive = "N:"
+$check_drive = "N"
+$check_path = "$($check_drive):"
 $check_count = 1..6
 $sleep_time = "10"
 
-# If $check_drive does not exists
-if ($(Test-Path $check_drive) -eq $False) {
+# Start logging
+$scriptname = $($MyInvocation.MyCommand.Name)
+Start-Transcript $env:temp\$scriptname.log -Append
+
+# If $check_path does not exists
+if ($(Test-Path $check_path) -eq $False) {
     # Try N times
     $check_count | ForEach-Object {
-        # Re-check $check_drive
-        # If $check_drive now exists, exit
-        if ($(Test-Path $check_drive) -eq $True) {
-            Write-Host "INFO: I already have the drive $($check_drive) mapped. Not calling FlexEngine.exe" -ForegroundColor Green
+        # Re-check $check_path
+        # If $check_path now exists, exit
+        if ($(Test-Path $check_path) -eq $True) {
+            Write-Host "INFO: I already have the drive $($check_path) mapped. Not calling FlexEngine.exe" -ForegroundColor Green
             exit 0
             }
         else {
@@ -32,11 +37,17 @@ if ($(Test-Path $check_drive) -eq $False) {
         }
     }
 else {
-    Write-Host "INFO: I already have the drive $($check_drive) mapped. Not calling FlexEngine.exe" -ForegroundColor Green
+    Write-Host "INFO: I already have the drive $($check_path) mapped. Not calling FlexEngine.exe" -ForegroundColor Green
     exit 0
     }
 
 <# Troubleshoot
+Get-PSDrive
+Get-PSDrive $check_drive
+Get-PSDrive $check_drive | Remove-PSDrive -Force
 net use
-net use /d $check_drive
+net use /d $check_path
 #>
+
+# Stop logging
+Stop-Transcript
