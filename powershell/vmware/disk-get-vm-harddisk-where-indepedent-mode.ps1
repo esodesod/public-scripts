@@ -1,0 +1,1 @@
+Get-VM | Get-HardDisk | Where-Object {$_.Persistence -eq "IndependentPersistent"} | Format-Table Parent,Name,DiskType,Persistence,CapacityGB -AutoSize
