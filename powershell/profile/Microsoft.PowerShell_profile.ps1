@@ -5,15 +5,16 @@
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 #<# Test paths for *.ps1 & load (if found)
-$test_powershell_fuctions_path1 = "$($env:USERPROFILE)\GitHub\esodesod\scripts\powershell\functions"
-if (Test-Path $test_powershell_fuctions_path1) {
-    $result_test_powershell_fuctions_path1 = $test_powershell_fuctions_path1
-    Write-Host "INFO: Found PowerShell functions in $result_test_powershell_fuctions_path1" -ForegroundColor DarkGray
-    Get-ChildItem "$($result_test_powershell_fuctions_path1)\*.ps1" | ForEach-Object {
-        Write-Host "INFO: Loading $_" -ForegroundColor DarkGray
-        .$_
-    }
-    Write-Host "Custom esod.no PowerShell environment loaded" -ForegroundColor DarkGreen
-}
+$test_powershell_functions_paths = @("C:\Users\odegaarde\GitHub\esodesod\scripts\powershell\functions","C:\temp\github\esodesod\scripts\powershell\fucntions")
 
+foreach ($test_path in $test_powershell_functions_paths) {
+    if (Test-Path $test_path) {
+        Write-Host "INFO: Found PowerShell functions in $test_path" -ForegroundColor DarkGray
+        Get-ChildItem "$($test_path)\*.ps1" | ForEach-Object {
+            Write-Host "INFO: Loading $_" -ForegroundColor DarkGray
+            .$_
+        }
+        Write-Host "INFO: Custom fuctions from $test_path loaded" -ForegroundColor DarkGreen
+    }
+}
 #>
