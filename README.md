@@ -137,6 +137,11 @@ Get-ItemProperty HKLM:\SYSTEM\CurrentControlSet\Enum\HID\*\*\Device` Parameters 
 ```
 Needs reboot or trigger change
 
+Find owning process of a network port (or vice verca)
+```powershell
+Get-Process -Id (Get-NetTCPConnection -LocalPort 139).OwningProcess
+Get-Process -Id (Get-NetTCPConnection -RemotePort 443).OwningProcess
+```
 
 ## Cisco
 ### Quick view on ports + input & output rate
