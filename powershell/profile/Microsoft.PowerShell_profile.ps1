@@ -5,7 +5,7 @@
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
 
 #<# Test paths for *.ps1 & load (if found)
-$test_powershell_functions_paths = @("C:\Users\odegaarde\GitHub\esodesod\scripts\powershell\functions","C:\temp\github\esodesod\scripts\powershell\fucntions")
+$test_powershell_functions_paths = @("C:\Users\odegaarde\GitHub\esodesod\scripts\powershell\functions","C:\temp\github\esodesod\scripts\powershell\functions")
 
 foreach ($test_path in $test_powershell_functions_paths) {
     if (Test-Path $test_path) {
