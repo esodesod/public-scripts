@@ -11,4 +11,4 @@ done <<< "$z"
 #echo $var
 echo "$(date "+%Y-%m-%d %H:%M:%S") Sending ps metrics to pushgateway"
 curl -X POST -H  "Content-Type: text/plain" --data "$var
-" http://localhost:9091/metrics/job/top/instance/machine
+" http://localhost:9091/metrics/job/top/instance/esod-mbp-16
