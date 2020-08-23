@@ -8,7 +8,6 @@ while read -r z
 do
    var=$var$(awk '{print "cpu_usage{process=\""$3$4$5$6"\", pid=\""$1"\"}", $2z}');
 done <<< "$z"
-#echo $var
-echo "$(date "+%Y-%m-%d %H:%M:%S") Sending ps metrics to pushgateway"
+echo "$(date "+%Y-%m-%d %H:%M:%S") Sending $(echo "$var" | wc -l) ps metrics to pushgateway"
 curl -X POST -H  "Content-Type: text/plain" --data "$var
 " http://localhost:9091/metrics/job/top/instance/esod-mbp-16
