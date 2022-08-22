@@ -84,6 +84,7 @@ $hash = @{
  SoftwareVersion = $PhysicalNicHintInfo.ConnectedSwitchPort.SoftwareVersion
  MangementAddress = $PhysicalNicHintInfo.ConnectedSwitchPort.MgmtAddr
  PortId = $PhysicalNicHintInfo.ConnectedSwitchPort.PortId
+ Vlan = $PhysicalNicHintInfo.ConnectedSwitchPort.Vlan
 
 }
  $Object = New-Object PSObject -Property $hash
