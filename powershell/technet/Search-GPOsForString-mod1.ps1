@@ -4,17 +4,16 @@
 # Author: Tony Murray 
 # Version: 1.0 
 # Date: 13/07/2016 
-# Comment: Simple search for GPOs within a domain 
-# that match a given string 
+# Comment: Simple search for GPOs within a domain that match a given string 
 # ----------
-# ESOD mods:
-# * Added simple filter om GPO name
-# * Added output of "hits" in result
-# * Don't output non-matching GPOs (sorry, but we don't care about those ;-)
+# Mods by Espen Ødegaard
+# * Added simple filter on GPO Name
+# * Added output of "hits" (matches) in result
+# * Don't output non-matching GPOs (sorry, but I really don't care about non-matching GPOs :-)
 ######################################################## 
  
 # Get the string we want to search for 
-$string = "bgo-p"
+$string = "search string"
 
 # Set the domain to search for GPOs 
 $DomainName = $env:USERDNSDOMAIN
@@ -22,7 +21,7 @@ $DomainName = $env:USERDNSDOMAIN
 # Find all GPOs in the current domain 
 write-host "Finding all the GPOs in $DomainName" 
 Import-Module grouppolicy 
-$allGposInDomain = Get-GPO -All -Domain $DomainName | Where-Object DisplayName -Match "^RTM*"
+$allGposInDomain = Get-GPO -All -Domain $DomainName # | Where-Object DisplayName -Match "^RTM*"
  
 # Look through each GPO's XML for the string 
 Write-Host "Starting search for $string" 
