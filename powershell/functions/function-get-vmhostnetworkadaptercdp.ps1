@@ -1,5 +1,6 @@
-﻿function Get-VMHostNetworkAdapterCDP {
-<#
+﻿function Get-VMHostNetworkAdapterCDP
+{
+	<#
  .SYNOPSIS
  Function to retrieve the Network Adapter CDP info of a vSphere host.
 
@@ -22,83 +23,93 @@
  PS> Get-VMHost ESXi01,ESXi02 | Get-VMHostNetworkAdapterCDP
 
 #>
-[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
+	[CmdletBinding()][OutputType('System.Management.Automation.PSObject')]
 
-Param
+	Param
  (
 
-[parameter(Mandatory=$true,ValueFromPipeline=$true)]
- [ValidateNotNullOrEmpty()]
- [PSObject[]]$VMHost
+		[parameter(Mandatory=$true,ValueFromPipeline=$true)]
+		[ValidateNotNullOrEmpty()]
+		[PSObject[]]$VMHost
  )
 
-begin {
+	begin
+	{
 
- $ErrorActionPreference = 'Stop'
- Write-Debug $MyInvocation.MyCommand.Name
- $CDPObject = @()
+		$ErrorActionPreference = 'Stop'
+		Write-Debug $MyInvocation.MyCommand.Name
+		$CDPObject = @()
  }
 
-process{
+	process
+	{
 
-try {
- foreach ($ESXiHost in $VMHost){
+		try
+		{
+			foreach ($ESXiHost in $VMHost)
+			{
 
-if ($ESXiHost.GetType().Name -eq "string"){
+				if ($ESXiHost.GetType().Name -eq "string")
+				{
 
- try {
- $ESXiHost = Get-VMHost $ESXiHost -ErrorAction Stop
+					try
+					{
+						$ESXiHost = Get-VMHost $ESXiHost -ErrorAction Stop
+					} catch [Exception]
+					{
+						Write-Warning "VMHost $ESXiHost does not exist"
+					}
+				}
+
+				elseif ($ESXiHost -isnot [VMware.VimAutomation.ViCore.Impl.V1.Inventory.VMHostImpl])
+				{
+					Write-Warning "You did not pass a string or a VMHost object"
+					Return
+				}
+
+				$ConfigManagerView = Get-View $ESXiHost.ExtensionData.ConfigManager.NetworkSystem
+				$PNICs = $ConfigManagerView.NetworkInfo.Pnic
+
+				foreach ($PNIC in $PNICs)
+				{
+
+					$PhysicalNicHintInfo = $ConfigManagerView.QueryNetworkHint($PNIC.Device)
+
+					if ($PhysicalNicHintInfo.ConnectedSwitchPort)
+					{
+
+						$Connected = $true
+					} else
+					{
+						$Connected = $false
+					}
+
+					$hash = @{
+
+						VMHost = $ESXiHost.Name
+						NIC = $PNIC.Device
+						Connected = $Connected
+						Switch = $PhysicalNicHintInfo.ConnectedSwitchPort.DevId
+						HardwarePlatform = $PhysicalNicHintInfo.ConnectedSwitchPort.HardwarePlatform
+						SoftwareVersion = $PhysicalNicHintInfo.ConnectedSwitchPort.SoftwareVersion
+						ManagementAddress = $PhysicalNicHintInfo.ConnectedSwitchPort.MgmtAddr
+						PortId = $PhysicalNicHintInfo.ConnectedSwitchPort.PortId
+						Vlan = $PhysicalNicHintInfo.ConnectedSwitchPort.Vlan
+
+					}
+					$Object = New-Object PSObject -Property $hash
+					$CDPObject += $Object
+				}
+			}
+		} catch [Exception]
+  {
+
+			throw "Unable to retrieve CDP info"
+		}
  }
- catch [Exception]{
- Write-Warning "VMHost $ESXiHost does not exist"
- }
- }
+ end
+	{
 
- elseif ($ESXiHost -isnot [VMware.VimAutomation.ViCore.Impl.V1.Inventory.VMHostImpl]){
- Write-Warning "You did not pass a string or a VMHost object"
- Return
- }
-
-$ConfigManagerView = Get-View $ESXiHost.ExtensionData.ConfigManager.NetworkSystem
- $PNICs = $ConfigManagerView.NetworkInfo.Pnic
-
-foreach ($PNIC in $PNICs){
-
-$PhysicalNicHintInfo = $ConfigManagerView.QueryNetworkHint($PNIC.Device)
-
-if ($PhysicalNicHintInfo.ConnectedSwitchPort){
-
-$Connected = $true
- }
- else {
- $Connected = $false
- }
-
-$hash = @{
-
- VMHost = $ESXiHost.Name
- NIC = $PNIC.Device
- Connected = $Connected
- Switch = $PhysicalNicHintInfo.ConnectedSwitchPort.DevId
- HardwarePlatform = $PhysicalNicHintInfo.ConnectedSwitchPort.HardwarePlatform
- SoftwareVersion = $PhysicalNicHintInfo.ConnectedSwitchPort.SoftwareVersion
- MangementAddress = $PhysicalNicHintInfo.ConnectedSwitchPort.MgmtAddr
- PortId = $PhysicalNicHintInfo.ConnectedSwitchPort.PortId
- Vlan = $PhysicalNicHintInfo.ConnectedSwitchPort.Vlan
-
-}
- $Object = New-Object PSObject -Property $hash
- $CDPObject += $Object
- }
- }
- }
- catch [Exception] {
-
- throw "Unable to retrieve CDP info"
- }
- }
- end {
-
- Write-Output $CDPObject
+		Write-Output $CDPObject
  }
 }
